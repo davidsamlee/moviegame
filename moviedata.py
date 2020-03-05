@@ -6,7 +6,8 @@ API_KEY="68941a5169052a35992dab2d8cae9249"
 #Starting URL for the API
 BASE_URL="https://api.themoviedb.org/3"
 
-#Returns a list of n movie objects from the TMDB service's "top rated" list.
+#Returns a random set of n movie objects from the top of the TMDB service's "top rated" list. poolSize is the number of items off the top to pick from.
+
 #For other available endpoints see https://developers.themoviedb.org/3/movies/get-movie-details
 def getRandomMovies(n, poolSize=50):
   popularMovies = getResults('movie/top_rated',poolSize)
