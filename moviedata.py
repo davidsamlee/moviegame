@@ -8,23 +8,28 @@ BASE_URL="https://api.themoviedb.org/3"
 
 #Returns a list of n movie objects from the TMDB service's "top rated" list.
 #For other available endpoints see https://developers.themoviedb.org/3/movies/get-movie-details
-def getRandomMovies(n):
-  popularMovies = getJson('movie/top_rated')['results']
+def getRandomMovies(n, poolSize=50):
+  popularMovies = getResults('movie/top_rated',poolSize)
+  print(len(popularMovies))
   return random.choices(popularMovies, k=n)
 
-def getResults(url, minResults=50):
+#Queries data from a TMDB endpoint. If the first page doesn't return enough results, it cycles through successive pages until it has the minimum specified.
+def getResults(uri, minResults):
   gotResults = 0
   results = []
+  page = 0
+
   while (gotResults < minResults):
-    response = getJson(uri)
+    page += 1
+    url = "{}/{}?api_key={}&page={}&language=en-US".format(BASE_URL,uri,API_KEY,page)
+    response = getJson(url)
     totalResults = response['total_results']
     if minResults > totalResults:
       minResults = totalResults
-    results += response['results']
-    
-
-
-
+    newResults = response['results']
+    results += newResults
+    gotResults += len(newResults)
+  return results[:minResults]
 
 # Generic function for making an API call to the TMDB service
 def getJson(url):
