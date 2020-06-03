@@ -1,12 +1,14 @@
 from moviedata import getRandomMovies
+import random
+
 
 # Simple example function to generate a random multiple choice movie question with three answers.
 def questionAndAnswers():
-    film = getRandomMovies(1)[0] # Pick a single movie at random
-    yearReleased = int(film["release_date"][:4]) # Get the release date, take the first 4 characters (the year), and convert from string to a number
+    films = getRandomMovies(3)  # Pick three films at random
+    rightAnswerIndex = random.randint(0,2)  # Decide which of the three is right
+
     return {
-        "question":
-        "Which year was the movie {} released?".format(film["title"]),
-        "answers": [yearReleased - 2, yearReleased, yearReleased + 2],
-        "rightAnswerIndex": 1
+        "question": "Which of the following films was released in {}?".format(films[rightAnswerIndex]["release_date"][:4]),
+        "answers": list(map(lambda film: film["title"], films)),
+        "rightAnswerIndex": rightAnswerIndex
     }
